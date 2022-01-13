@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { Platform, StyleSheet } from 'react-native';
 
-import { EditElevatorScreen } from '../components/EditScreenInfo';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
@@ -10,7 +9,7 @@ export default function WarningScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Warning</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditElevatorScreen path="/screens/DetailsScreen.tsx" />
+      <EditScreenInfo path="/screens/WarningScreen.tsx" />
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />

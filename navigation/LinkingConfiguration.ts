@@ -25,6 +25,11 @@ const linking: LinkingOptions<RootStackParamList> = {
               HomeScreen: 'Home',
             },
           },
+          Details: {
+            screens: {
+              DetailsScreen: 'Details',
+            },
+          },
         },
       },
       Warning: 'modal',

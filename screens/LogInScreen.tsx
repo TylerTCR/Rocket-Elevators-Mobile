@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 50,
   },
   container: {
-    flex: 1,
+    flex: .9,
     alignItems: 'center',
     justifyContent: 'center',
   },

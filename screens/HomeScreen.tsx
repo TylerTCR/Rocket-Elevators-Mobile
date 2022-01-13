@@ -3,8 +3,9 @@ import { ActivityIndicator, Button, FlatList, StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import { RootTabScreenProps } from '../types';
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }: RootTabScreenProps<'LogIn'>) {
   const elevatorListEndpoint = "https://tyler-rocket-elevator.azurewebsites.net/elevator/inactive";
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
@@ -27,7 +28,7 @@ export default function HomeScreen() {
   
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>All Elevators</Text>
+      <Text style={styles.title}>Inactive Elevators</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <View>
         {isLoading ? <ActivityIndicator/> : (
@@ -38,9 +39,11 @@ export default function HomeScreen() {
               <Button
                 title={`Elevator ID: ${item.id}`}
                 onPress={() => {
-                 
+                  navigation.navigate("Details", {
+                    id: item.id,
+                    status: item.status,
+                  });
                 }}>
-
               </Button>
               // <Text
               //   style={styles.getStartedText}
@@ -58,6 +61,13 @@ export default function HomeScreen() {
         Eventual list of elevators to view
         </Text> */}
       </View>
+      <Button
+        title="Log Out"
+        onPress={() => {
+          navigation.navigate("Root")
+        }}>
+
+      </Button>
       {/* <EditScreenInfo path="/screens/HomeScreen.tsx" /> */}
     </View>
   );
@@ -65,7 +75,8 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.25,
+    marginTop: "20%",
+    flex: 0.75,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -83,4 +94,10 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center',
   },
+  buttonText:{
+    fontSize: 20,
+    color: '#fff',
+    padding: 10,
+    borderRadius: 5
+}
 });
