@@ -32,35 +32,32 @@ export default function LogInScreen({ navigation }: RootTabScreenProps<'LogIn'>)
           defaultValue={""}
         />
 
-        <Button
-          title="Sign In"
-          onPress={() => {
-            // If no text was entered
-            if (email == "") {
-              navigation.navigate('Warning')
-            // If there is text entered
-            } else if (email != "") {
-              // Convert all letters to lowercase
-              let _email = email.toLowerCase()
-              // Make API call with the user-entered email
-              fetch(`https://tyler-rocket-elevator.azurewebsites.net/employee/${_email}`)
-              .then((result) => result.json())
-              .then((data) => {
-                // If the returned value equal the user-entered value send them to Home screen, otherwise, display alert
-                data == _email ? navigation.navigate('Home') : navigation.navigate('Warning')
-              })
-            }
-          }}
-          
-        />
-
-        {/* <Text
-          style={styles.getStartedText}
-          lightColor="rgba(0,0,0,0.8)"
-          darkColor="rgba(255,255,255,0.8)">
-          Change any of the text, save the file, and your app will automatically update.
-        </Text> */}
+        
       </View>
+      <View style={styles.button}>
+          <Button
+            title="Sign In"
+            color="#ffffff"
+            onPress={() => {
+              // If no text was entered
+              if (email == "") {
+                navigation.navigate('Warning')
+              // If there is text entered
+              } else if (email != "") {
+                // Convert all letters to lowercase
+                let _email = email.toLowerCase()
+                // Make API call with the user-entered email
+                fetch(`https://tyler-rocket-elevator.azurewebsites.net/employee/${_email}`)
+                .then((result) => result.json())
+                .then((data) => {
+                  // If the returned value equal the user-entered value send them to Home screen, otherwise, display alert
+                  data == _email ? navigation.navigate('Home') : navigation.navigate('Warning')
+                })
+              }
+            }}
+            
+          />
+        </View>
     </View>
   );
 }
@@ -100,5 +97,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(200,200,200,0.5)",
     color: "rgba(150,150,150,1)",
+  },
+  button:{
+    backgroundColor: "#358aff",
+    borderRadius: 20,
+    padding: 5,
+    width: "50%",
+    alignItems: "center",
+    margin: 5,
   },
 });
