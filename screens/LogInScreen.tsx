@@ -1,4 +1,4 @@
-import { Button, Modal, StyleSheet, TextInput, Image } from 'react-native';
+import { Button, Modal, StyleSheet, TextInput, Image, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 // import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -34,30 +34,37 @@ export default function LogInScreen({ navigation }: RootTabScreenProps<'LogIn'>)
 
         
       </View>
-      <View style={styles.button}>
-          <Button
-            title="Sign In"
-            color="#ffffff"
-            onPress={() => {
-              // If no text was entered
-              if (email == "") {
-                navigation.navigate('Warning')
-              // If there is text entered
-              } else if (email != "") {
-                // Convert all letters to lowercase
-                let _email = email.toLowerCase()
-                // Make API call with the user-entered email
-                fetch(`https://tyler-rocket-elevator.azurewebsites.net/employee/${_email}`)
-                .then((result) => result.json())
-                .then((data) => {
-                  // If the returned value equal the user-entered value send them to Home screen, otherwise, display alert
-                  data == _email ? navigation.navigate('Home') : navigation.navigate('Warning')
-                })
-              }
-            }}
-            
-          />
-        </View>
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={() => {
+          // If no text was entered
+          if (email == "") {
+            navigation.navigate('Warning')
+          // If there is text entered
+          } else if (email != "") {
+            // Convert all letters to lowercase
+            let _email = email.toLowerCase()
+            // Make API call with the user-entered email
+            fetch(`https://tyler-rocket-elevator.azurewebsites.net/employee/${_email}`, {
+              method: "GET",
+              mode: "cors",
+              headers: new Headers({
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": "true",
+                "Access-Control-Allow-Methods": "GET",
+                "Access-Control-Allow-Headers": "Origin, Content-Type, Accept"
+              }),
+            })
+            .then((result) => result.json())
+            .then((data) => {
+              // If the returned value equal the user-entered value send them to Home screen, otherwise, display alert
+              data == _email ? navigation.navigate('Home') : navigation.navigate('Warning')
+            })
+          }
+        }}>
+        <Text style={styles.buttonText}>Sign In</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -98,11 +105,17 @@ const styles = StyleSheet.create({
     borderColor: "rgba(200,200,200,0.5)",
     color: "rgba(150,150,150,1)",
   },
+  buttonText:{
+    fontSize: 20,
+    color: 'white',
+    padding: 5,
+    borderRadius: 5
+  },
   button:{
     backgroundColor: "#358aff",
     borderRadius: 20,
     padding: 5,
-    width: "50%",
+    width: 250,
     alignItems: "center",
     margin: 5,
   },

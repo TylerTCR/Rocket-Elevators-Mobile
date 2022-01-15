@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, FlatList, StyleSheet } from 'react-native';
+import { ActivityIndicator, Button, StyleSheet, TouchableOpacity } from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 
 export default function DetailsScreen({ route, navigation }) {
-  const { id, status } = route.params;
+  let { id, status } = route.params;
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const elevatorStatusEndpoint = `https://tyler-rocket-elevator.azurewebsites.net/elevator/${id}`
@@ -18,7 +17,7 @@ export default function DetailsScreen({ route, navigation }) {
     .then((json) => setData(json))
     .catch((error) => console.log(error))
     .finally(() => setLoading(false));
-  }, []);
+  }, [data]);
 
   function updateStatus() {
     let headers = new Headers();
@@ -50,6 +49,15 @@ export default function DetailsScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.backContainer}
+        onPress={() => {
+          navigation.navigate("Home")
+        }}>
+        <View style={styles.backButton}>
+          <Text>Go Back</Text>
+        </View>
+      </TouchableOpacity>
       <Text style={styles.title} lightColor="rgba(0,0,0,0.8)" darkColor="rgba(255,255,255,0.8)">
         Elevator #{JSON.stringify(id)}
       </Text>
@@ -64,40 +72,43 @@ export default function DetailsScreen({ route, navigation }) {
 
         {isLoading ? <ActivityIndicator/> : (
           <Text 
-          style={[styles.status, data.status == "Active" ? {color: "green"} : {color: "red"}]}>
+          style={[styles.status, status == "Active" ? {color: "green"} : {color: "red"}]}>
           {status}
           </Text>
         )}
         
       </View>
+      <TouchableOpacity 
+        style={styles.button}
+        disabled={status == "Active" ? true : false}
+        onPress={() => {
+          navigation.navigate("Details", {
+            id: id,
+            status: "Active",
+          });
+          updateStatus()
+        }}>
+        <Text style={styles.getStartedText}>Set to Active</Text>
+      </TouchableOpacity>
 
-      <View style={styles.button}>
-        <Button
-          title="Set to Active"
-          color="#ffffff"
-          onPress={() => {
-            updateStatus()
-            // navigation.navigate("Home")
-          }}>
-        </Button>
-      </View>
-
-      <View style={styles.logOutButton}>
-        <Button
-          title="Log Out"
-          color="#ffffff"
-          onPress={() => {
-            navigation.navigate("Root")
-          }}>
-        </Button>
-      </View>
+      <TouchableOpacity 
+        style={styles.logOutButton}
+        onPress={() => {
+          navigation.navigate("Root")
+        }}>
+        <Text style={styles.getStartedText}>Log Out</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  backContainer: {
     flex: 0.9,
+    marginStart: -275,
+  },
+  container: {
+    flex: 0.75,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -109,7 +120,7 @@ const styles = StyleSheet.create({
   separator: {
     marginVertical: 30,
     height: 1,
-    width: '80%',
+    width: '70%',
   },
   status: {
     padding: 20,
@@ -120,23 +131,32 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   getStartedText: {
-    fontSize: 17,
+    fontSize: 18,
     lineHeight: 24,
+    padding: 7,
+    color: "#ffffff",
     textAlign: 'center',
   },
   button:{
     backgroundColor: "#61c058",
     borderRadius: 10,
     padding: 5,
-    width: "80%",
+    width: "70%",
     alignItems: "center",
     marginTop: 20,
+  },
+  backButton:{
+    backgroundColor: "#000aff",
+    borderRadius: 10,
+    padding: 15,
+    width: "80%",
+    alignItems: "center",
   },
   logOutButton:{
     backgroundColor: "#ff192b",
     borderRadius: 10,
     padding: 5,
-    width: "80%",
+    width: "70%",
     alignItems: "center",
     marginTop: 20,
   },

@@ -16,9 +16,9 @@ import WarningScreen from '../screens/WarningScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import LogInScreen from '../screens/LogInScreen';
 import HomeScreen from '../screens/HomeScreen';
+import DetailsScreen from '../screens/DetailsScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
-import DetailsScreen from '../screens/DetailsScreen';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -41,7 +41,7 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen name="Root" component={LogInScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerBackVisible: false }} />
-      <Stack.Screen name="Details" component={DetailsScreen} options={{ headerBackVisible: true }} />
+      <Stack.Screen name="Details" component={DetailsScreen} options={{ headerBackVisible: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Warning" component={WarningScreen} />
@@ -58,7 +58,6 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
-  let signedIn = false;
 
   return (
     <BottomTab.Navigator
@@ -72,20 +71,20 @@ function BottomTabNavigator() {
         options={({ navigation }: RootTabScreenProps<'LogIn'>) => ({
           title: 'Sign In',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          // headerRight: () => (
-          //   <Pressable
-          //     onPress={() => navigation.navigate('Warning')}
-          //     style={({ pressed }) => ({
-          //       opacity: pressed ? 0.5 : 1,
-          //     })}>
-          //     <FontAwesome
-          //       name="info-circle"
-          //       size={25}
-          //       color={Colors[colorScheme].text}
-          //       style={{ marginRight: 15 }}
-          //     />
-          //   </Pressable>
-          // ),
+          headerRight: () => (
+            <Pressable
+              onPress={() => navigation.navigate('Warning')}
+              style={({ pressed }) => ({
+                opacity: pressed ? 0.5 : 1,
+              })}>
+              <FontAwesome
+                name="info-circle"
+                size={25}
+                color={Colors[colorScheme].text}
+                style={{ marginRight: 15 }}
+              />
+            </Pressable>
+          ),
         })}
       />
       <BottomTab.Screen

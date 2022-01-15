@@ -39,50 +39,43 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'LogIn'>) 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inactive Elevators</Text>
-      {/* <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" /> */}
-      <View>
+      <View style={styles.listContainer}>
         {isLoading ? <ActivityIndicator/> : (
           <FlatList
             data={data}
             keyExtractor={({ id }, index) => id}
             renderItem={({ item }) => (
               <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}
+                <Button
+                  title={`Elevator ID: ${item.id}`}
+                  color="white"
                   onPress={() => {
+                    // Go to details page, passing the specific id and status along with it
                     navigation.navigate("Details", {
                       id: item.id,
                       status: item.status,
                     });
                   }}>
-                  Elevator ID: {item.id}
-                </Text>
+                </Button>
               </TouchableOpacity>
-              // <Text
-              //   style={styles.getStartedText}
-              //   lightColor="rgba(0,0,0,0.8)"
-              //   darkColor="rgba(255,255,255,0.8)">
-              //   Elevator ID: {item.id}, Status: {item.status}
-              // </Text>
             )}
           />
         )}
-        {/* <Text
-        style={styles.getStartedText}
-        lightColor="rgba(0,0,0,0.8)"
-        darkColor="rgba(255,255,255,0.8)">
-        Eventual list of elevators to view
-        </Text> */}
       </View>
-      <View style={styles.logOutButton}>
-        <Button
+      <TouchableOpacity 
+        style={styles.logOutButton}
+        onPress={() => {
+          navigation.navigate("Root")
+        }}>
+        <Text style={styles.getStartedText}>Log Out</Text>
+        {/* <Button
           title="Log Out"
           color="#ffffff"
           onPress={() => {
             navigation.navigate("Root")
           }}>
-        </Button>
-      </View>
-      {/* <EditScreenInfo path="/screens/HomeScreen.tsx" /> */}
+        </Button> */}
+      </TouchableOpacity>
     </View>
   );
 }
@@ -91,6 +84,12 @@ const styles = StyleSheet.create({
   container: {
     marginTop: "23%",
     flex: 0.85,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  listContainer: {
+    paddingTop: 10,
+    paddingBottom: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -108,12 +107,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     lineHeight: 24,
     textAlign: 'center',
-  },
-  buttonText:{
-    fontSize: 20,
-    color: '#fff',
-    padding: 10,
-    borderRadius: 5
+    color: "#ffffff"
   },
   button:{
     backgroundColor: "#59bbff",
